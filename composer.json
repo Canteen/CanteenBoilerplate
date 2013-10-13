@@ -1,0 +1,11 @@
+{
+	"config": {
+		"vendor-dir": "deploy/lib/vendor"
+	},
+	"require-dev": {
+		"canteen/logger": "dev-master",
+		"canteen/database": "dev-master",
+		"canteen/html5": "dev-master",
+		"canteen/framework": "dev-master"
+	}
+}

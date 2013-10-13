@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<project name="CanteenBoilerplate" default="install" basedir="./">
+	<property file="${os.name}.build.properties"/>
+	<property file="build.properties"/>
+	
+	<target name="install" description="Update external libraries">
+		<echo message="+-----------------------------------+" />
+		<echo message="| Import PHP Packages from Composer |" />
+		<echo message="+-----------------------------------+" />	
+		<exec executable="${composer}">
+			<arg line="install" />
+			<arg line="--prefer-dist" />
+		</exec>
+		<echo message="+-------------------------------+" />
+		<echo message="| Import JS Packages from Bower |" />
+		<echo message="+-------------------------------+" />
+		<exec executable="${bower}">
+			<arg line="install" />
+			<arg line="${bower.packages}" />
+		</exec>
+		<copy todir="${bower.output.dir}" flatten="true">
+			<fileset dir="${bower.dir}">
+				<patternset>
+					<includesfile name="${bower.files}" />
+				</patternset>
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="uninstall" description="Remove all of the libraries">
+		<delete dir="${composer.dir}" />
+		<delete dir="${bower.dir}" />
+		<delete file="${composer.lock}" />
+		<delete dir="${bower.output.dir}" />
+	</target>
+</project>
