@@ -2,7 +2,7 @@
 
 This HTML5 Boilerplate project is designed to get a Canteen site up and running as quickly a possible. This project is a great starting point for customizing your own site.
 
-##Tools checklist
+##Tools Checklist
 
 The following tools are required to get the boilerplate project up and running. Absolute tool paths can be modified in __build.properties__.
 
@@ -11,7 +11,7 @@ The following tools are required to get the boilerplate project up and running. 
 + [Bower](http://bower.io/) for fetching the JavaScript dependencies. Install with `npm install bower`
 + [UglifyJS](https://github.com/mishoo/UglifyJS) for minifying Modernizr (version in Bower is not minified, ugh!). Install with `npm install uglify-js@1`
 
-###Getting Start
+##Getting Start
 
 1. Setup a MySQL database & a corresponding user
 2. Edit __deploy/config.php__ with your MySQL credentials
