@@ -1,4 +1,4 @@
 bower_components
-deploy/lib/vendor/canteen
-deploy/assets/js/vendor
+deploy/assets/php
+deploy/assets/js/libraries.js
 composer.lock

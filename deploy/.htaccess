@@ -8,14 +8,6 @@ DirectoryIndex index.php
 	RewriteRule . /index.php [L]
 </IfModule>
 
-#Protect the settings file
-<Files "settings.json">
-	order deny,allow
-	deny from all
-	Require all denied
-</Files>
-
-#Error documents
 ErrorDocument 401 /401
 ErrorDocument 403 /403
 ErrorDocument 404 /404

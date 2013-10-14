@@ -3,34 +3,82 @@
 	<property file="${os.name}.build.properties"/>
 	<property file="build.properties"/>
 	
+	<macrodef name="concat-source">
+		<attribute name="output" />
+		<attribute name="dir" />
+		<attribute name="order" />
+		<sequential>
+			<concat destfile="@{output}" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
+			     <resourcelist> 
+					<file file="@{order}" />
+					<filterchain>
+						<prefixlines prefix="@{dir}/" /> 
+					</filterchain>
+				</resourcelist>
+			</concat>
+		</sequential>
+	</macrodef>
+	
+	<macrodef name="minify-js">
+		<attribute name="file" />
+		<attribute name="output" />
+		<sequential>
+			<fail unless="js.compressor" message="js.compressor must be defined in the build.properties as the location of uglifyjs" />
+			<exec executable="${js.compressor}" failonerror="true">
+				<arg line="@{file}" />
+				<arg line="-o @{output}" />
+				<arg line="-m" />
+				<arg line="-c" />
+			</exec>
+		</sequential>
+	</macrodef>
+	
 	<target name="install" description="Update external libraries">
-		<echo message="+-----------------------------------+" />
-		<echo message="| Import PHP Packages from Composer |" />
-		<echo message="+-----------------------------------+" />	
-		<exec executable="${composer}">
+		<antcall target="update-php" />
+		<antcall target="update-js" />
+	</target>
+	
+	<target name="update-js">
+		<fail unless="js.packages" message="js.packages must be defined in the build.properties as the list of packages to download with bower" />
+		<fail unless="js.importer" message="js.importer must be defined in the build.properties as the location of bower" />
+		<fail unless="js.modernizr" message="js.modernizr must be defined in the build.properties as the location of the uncompressed modernizr file" />
+		<fail unless="js.modernizr.out" message="js.modernizr.out must be defined in the build.properties as the location of the output compressed modernizr file" />
+		<fail unless="js.dir" message="js.dir must be defined in the build.properties as the location of the bower components" />
+		<fail unless="js.output.file" message="js.output.file must be defined in the build.properties as the location of the output libraries concatination" />
+		<fail unless="js.files" message="js.files must be defined in the build.properties as the location of the list of library files to concatinate" />
+		<echo message="+--------------------+" />
+		<echo message="| Import JS Packages |" />
+		<echo message="+--------------------+" />
+		<exec executable="${js.importer}">
+			<arg line="install" />
+			<arg line="${js.packages}" />
+		</exec>
+		<echo message="+-------------------------+" />
+		<echo message="| Building the Library JS |" />
+		<echo message="+-------------------------+" />
+		<minify-js file="${js.modernizr}" output="${js.modernizr.out}" />
+		<concat-source dir="${js.dir}" output="${js.output.file}" order="${js.files}" />
+	</target>
+	
+	<target name="update-php">
+		<fail unless="php.importer" message="php.importer must be defined in the build.properties as the location of composer" />
+		<echo message="+---------------------+" />
+		<echo message="| Import PHP Packages |" />
+		<echo message="+---------------------+" />	
+		<exec executable="${php.importer}">
 			<arg line="install" />
 			<arg line="--prefer-dist" />
 		</exec>
-		<echo message="+-------------------------------+" />
-		<echo message="| Import JS Packages from Bower |" />
-		<echo message="+-------------------------------+" />
-		<exec executable="${bower}">
-			<arg line="install" />
-			<arg line="${bower.packages}" />
-		</exec>
-		<copy todir="${bower.output.dir}" flatten="true">
-			<fileset dir="${bower.dir}">
-				<patternset>
-					<includesfile name="${bower.files}" />
-				</patternset>
-			</fileset>
-		</copy>
 	</target>
 	
 	<target name="uninstall" description="Remove all of the libraries">
-		<delete dir="${composer.dir}" />
-		<delete dir="${bower.dir}" />
-		<delete file="${composer.lock}" />
-		<delete dir="${bower.output.dir}" />
+		<fail unless="js.output.file" message="js.output.file must be defined in the build.properties as the location of the output libraries concatination" />
+		<fail unless="js.dir" message="js.dir must be defined in the build.properties as the location of the bower components" />
+		<fail unless="php.dir" message="php.dir must be defined in the build.properties as the location of the composer downloaded libraries" />
+		<fail unless="php.lock" message="php.lock must be defined in the build.properties as the location of the composer lock file" />
+		<delete dir="${php.dir}" />
+		<delete dir="${js.dir}" />
+		<delete file="${js.output.file}" />
+		<delete file="${php.lock}" />
 	</target>
 </project>

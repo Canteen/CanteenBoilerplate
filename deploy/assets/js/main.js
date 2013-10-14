@@ -1,8 +1,11 @@
 $(function(){
 	
+	// Create a new site
 	var site = new Canteen.Site();
 	
+	// Listen for when the site is ready
 	site.on('ready', function(){
-		Debug.log("Termite site is setup!");
+		Debug.log("The Canteen site is setup!");
 	});
+	
 });

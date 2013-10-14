@@ -1,6 +1,6 @@
 {
 	"config": {
-		"vendor-dir": "deploy/lib/vendor"
+		"vendor-dir": "deploy/assets/php"
 	},
 	"require-dev": {
 		"canteen/logger": "dev-master",
