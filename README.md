@@ -14,7 +14,5 @@ The following tools are required to get the boilerplate project up and running. 
 ##Getting Start
 
 1. Setup a MySQL database & a corresponding user
-2. Edit __deploy/config.php__ with your MySQL credentials
-3. Import JavaScript and PHP dependencies by running `ant install`
-4. Modify __deploy/.htaccess__ if necessary
-5. Run index.php from Apache
+2. Import JavaScript and PHP dependencies by running `ant install`
+3. Run __index.php__ from Apache
