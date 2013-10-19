@@ -153,11 +153,21 @@ form input.error {
 	background-color:#ff7575 !important;
 	border-color:#4f1111 !important;
 }
+form select.disabled,
 form input.disabled {
 	color:#4a5e62 !important;
 	background-color:#b7bfc0 !important;
 	border-color:#5d747e !important;
 	cursor:default;
+}
+
+form .formNotice {
+	padding:10px;
+	border:1px solid #c60;
+	background:#FFE2B6;
+	margin-bottom:20px;
+	border-radius:5px;
+	color:#c60;
 }
 .optional {
 	background-color:#eee;
@@ -306,6 +316,8 @@ tbody tr.selected.over td {
 	margin-bottom:0;
 }
 .configUpdate label,
+.configUpdate select,
+.configUpdate .checkbox,
 .configUpdate .text,
 .configUpdate .submit,
 .configUpdate .button {
@@ -315,6 +327,8 @@ tbody tr.selected.over td {
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+.configUpdate select,
+.configUpdate .checkbox,
 .configUpdate .text{
 	width:45%;
 	font-size:100%;
