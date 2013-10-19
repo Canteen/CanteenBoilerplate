@@ -68,6 +68,10 @@ form textarea {
 	min-height:100px;
 }
 
+form textarea.large {
+	min-height:300px;
+}
+
 form .date,
 form textarea,
 form select,
@@ -326,4 +330,43 @@ tbody tr.selected.over td {
 	padding:8px 0 !important;
 	margin:0 0 0 1% !important;
 	font-size:100% !important;
+}
+
+/** For 0px - 599px */
+@media all and (max-width : 599px) {
+	.adminNav,
+	.adminContent  {
+		float:none;
+		width:100%;
+	}
+	.adminNav ul {
+		margin:0;
+		padding:5px;
+		line-height:1;
+	}
+	.adminNav ul li {
+		display:inline-block;
+		width:50%;
+	}
+	.adminHeader {
+		float:none;
+		margin:0;
+		text-align:center;
+	}
+	.adminNav a {
+		text-align:center;
+		margin:0 2px;
+	}
+	
+	.formContainer form {
+		padding:20px;
+	}
+	
+	.configUpdate form {
+		padding:5px 10px;
+	}
+	
+	.formRow label {
+		font-size:14px;
+	}
 }
