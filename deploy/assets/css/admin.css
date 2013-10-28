@@ -102,8 +102,8 @@ form select {
 }
 
 #content .button,
-form input.submit, 
-form input.clear {
+form .submit, 
+form .clear {
 	font-size:110%;
 	padding:8px 30px;
 	cursor:pointer;
@@ -124,16 +124,16 @@ form input.clear {
 }
 
 #content .button:hover,
-form input.submit:hover,
-form input.clear:hover {
+form .submit:hover,
+form .clear:hover {
 	background-color:#ae2a48;
 	border-color:#751a2d;
 }
 
 form textarea.disabled,
 #content .button.disabled,
-form input.submit.disabled, 
-form input.clear.disabled{	
+form .submit.disabled, 
+form .clear.disabled {	
 	color:#4a5e62 !important;
 	background-color:#b7bfc0 !important;
 	border-color:#5d747e !important;
@@ -153,8 +153,7 @@ form input.error {
 	background-color:#ff7575 !important;
 	border-color:#4f1111 !important;
 }
-form select.disabled,
-form input.disabled {
+form .disabled {
 	color:#4a5e62 !important;
 	background-color:#b7bfc0 !important;
 	border-color:#5d747e !important;
