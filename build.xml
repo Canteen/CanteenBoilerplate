@@ -57,6 +57,7 @@
 		<echo message="| Building the Library JS |" />
 		<echo message="+-------------------------+" />
 		<minify-js file="${js.modernizr}" output="${js.modernizr.out}" />
+		<minify-js file="${js.jqueryform}" output="${js.jqueryform.out}" />
 		<concat-source dir="${js.dir}" output="${js.output.file}" order="${js.files}" />
 	</target>
 	

@@ -1,4 +1,6 @@
 modernizr/modernizr.min.js
 jquery/jquery.min.js
+jquery-form/jquery.form.min.js
+touchclick/touchclick.js
 Canteen/lib/Canteen.min.js
 history.js/scripts/bundled/html5/jquery.history.js
