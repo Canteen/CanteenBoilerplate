@@ -14,25 +14,25 @@
 				
 		{{settings}}
 		
-		<link rel="stylesheet" href="assets/css/normalize.css">
-		<link rel="stylesheet" href="assets/css/boilerplate.css">
+		<link rel="stylesheet" href="assets/components/canteen-admin/css/fonts.css" />
+		<link rel="stylesheet" href="assets/css/libraries.css">
 		<link rel="stylesheet" href="assets/css/main.css">
-		<link rel="stylesheet" href="assets/css/admin.css">
 		
 		<script src="assets/js/libraries.js"></script>
+		<script src="assets/components/tinymce/js/tinymce/jquery.tinymce.min.js"></script>
+		<script src="assets/components/tinymce/js/tinymce/tinymce.min.js"></script>
 		<script src="assets/js/main.js"></script>
 		
 	</head>
 	<body id="{{pageId}}">
 		<div id="frame">
-			<nav>
+			<nav class="main">
 				<ul>
 					<li><a href="home">Home</a></li>
 					<li><a href="admin">Admin</a></li>
 				</ul>
 			</nav>
 			<article>
-				<h1>{{pageTitle}}</h1>
 				<div id="content" class="clearfix">{{content}}</div>
 			</article>
 			<footer>

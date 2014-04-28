@@ -1,8 +1,6 @@
-bower_components
+components
 deploy/assets/php
+deploy/assets/components
 deploy/assets/js/libraries.js
+deploy/assets/css/libraries.css
 composer.lock
-deploy/assets/js/Canteen.js
-deploy/assets/js/jquery.history.js
-deploy/assets/js/jquery.js
-deploy/assets/js/modernizer.js

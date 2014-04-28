@@ -1,0 +1,3 @@
+canteen-admin/fonts/*
+canteen-admin/css/fonts.css
+tinymce/js/tinymce/**/**/**/**

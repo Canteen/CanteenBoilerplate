@@ -1,85 +1,117 @@
 <?xml version="1.0"?>
 <project name="CanteenBoilerplate" default="install" basedir="./">
-	<property file="${os.name}.build.properties"/>
-	<property file="build.properties"/>
-	
-	<macrodef name="concat-source">
-		<attribute name="output" />
-		<attribute name="dir" />
+	<property file="build/${os.name}.build.properties"/>
+	<property file="build/build.properties"/>
+
+	<macrodef name="uglifyjs">
+		<attribute name="options" default="-m" />
+		<attribute name="debug" default="false" />
+		<attribute name="compress" default="" />
 		<attribute name="order" />
+		<attribute name="dir" />
+		<attribute name="output" />
 		<sequential>
-			<concat destfile="@{output}" encoding="UTF-8" outputencoding="UTF-8" fixlastline="true">
-			     <resourcelist> 
-					<file file="@{order}" />
-					<filterchain>
-						<prefixlines prefix="@{dir}/" /> 
-					</filterchain>
-				</resourcelist>
-			</concat>
+			<fail unless="uglifyjs" message="Path to the uglifyjs program" />
+			<echo message="+------------------------------+" />
+			<echo message="| Building the Game JavaScript |" />
+			<echo message="+------------------------------+" />
+			<resourcelist id="files"> 
+				<file file="@{order}" />
+				<filterchain>
+					<prefixlines prefix="@{dir}/" /> 
+				</filterchain>
+			</resourcelist>
+		    <pathconvert property="allFiles" refid="files" pathsep=" " />				
+			<exec executable="${uglifyjs}" failonerror="true">
+				<arg line="${allFiles}" />
+				<arg line="-o @{output}" />
+				<arg line="@{options}" />
+				<arg line="-c @{compress}" />
+				<arg line="--define DEBUG=@{debug},RELEASE=!@{debug}" />
+			</exec>
 		</sequential>
 	</macrodef>
-	
-	<macrodef name="minify-js">
-		<attribute name="file" />
+
+	<macrodef name="uglifycss">
+		<attribute name="order" />
+		<attribute name="dir" />
 		<attribute name="output" />
 		<sequential>
-			<fail unless="js.compressor" message="js.compressor must be defined in the build.properties as the location of uglifyjs" />
-			<exec executable="${js.compressor}" failonerror="true">
-				<arg line="@{file}" />
-				<arg line="-o @{output}" />
-				<arg line="-m" />
-				<arg line="-c" />
+			<resourcelist id="files"> 
+				<file file="@{order}" />
+				<filterchain>
+					<prefixlines prefix="@{dir}/" /> 
+				</filterchain>
+			</resourcelist>
+		    <pathconvert property="@{output}" refid="files" pathsep=" " />
+			<exec executable="${uglifycss}" output="@{output}">
+				<arg line="${@{output}}" />
 			</exec>
 		</sequential>
 	</macrodef>
 	
 	<target name="install" description="Update external libraries">
-		<antcall target="update-php" />
-		<antcall target="update-js" />
+		<antcall target="install-php" />
+		<antcall target="install-components" />
 	</target>
 	
-	<target name="update-js">
-		<fail unless="js.packages" message="js.packages must be defined in the build.properties as the list of packages to download with bower" />
-		<fail unless="js.importer" message="js.importer must be defined in the build.properties as the location of bower" />
-		<fail unless="js.modernizr" message="js.modernizr must be defined in the build.properties as the location of the uncompressed modernizr file" />
-		<fail unless="js.modernizr.out" message="js.modernizr.out must be defined in the build.properties as the location of the output compressed modernizr file" />
-		<fail unless="js.dir" message="js.dir must be defined in the build.properties as the location of the bower components" />
-		<fail unless="js.output.file" message="js.output.file must be defined in the build.properties as the location of the output libraries concatination" />
+	<target name="install-components" description="Use Bower to import external dependencies">
+		<fail unless="bower.components" message="bower.components must be defined in the build.properties as the list of packages to download with bower" />
+		<fail unless="bower" message="bower must be defined in the build.properties as the location of bower" />
+		<fail unless="bower.dir" message="bower.dir must be defined in the build.properties as the location of the bower components" />
+		<fail unless="js.output" message="js.output must be defined in the build.properties as the location of the output libraries concatination" />
 		<fail unless="js.files" message="js.files must be defined in the build.properties as the location of the list of library files to concatinate" />
 		<echo message="+--------------------+" />
 		<echo message="| Import JS Packages |" />
 		<echo message="+--------------------+" />
-		<exec executable="${js.importer}">
+		<exec executable="${bower}">
 			<arg line="install" />
-			<arg line="${js.packages}" />
+			<arg line="${bower.components}" />
 		</exec>
 		<echo message="+-------------------------+" />
 		<echo message="| Building the Library JS |" />
 		<echo message="+-------------------------+" />
-		<minify-js file="${js.modernizr}" output="${js.modernizr.out}" />
-		<minify-js file="${js.jqueryform}" output="${js.jqueryform.out}" />
-		<concat-source dir="${js.dir}" output="${js.output.file}" order="${js.files}" />
+		<uglifyjs output="${js.output}" dir="${bower.dir}" order="${js.files}" />
+		<echo message="+--------------------------+" />
+		<echo message="| Building the Library CSS |" />
+		<echo message="+--------------------------+" />
+		<uglifycss output="${css.output}" dir="${bower.dir}" order="${css.files}" />
+		<echo message="+----------------------+" />
+		<echo message="| Importing Components |" />
+		<echo message="+----------------------+" />
+		<copy todir="${imports.output}">
+			<fileset dir="${bower.dir}">
+				<patternset>
+					<includesfile name="${imports.files}" />
+				</patternset>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="uninstall-components" description="clear the components folder">
+		<delete dir="${bower.dir}" />
+		<delete dir="${imports.output}" />
 	</target>
 	
-	<target name="update-php">
-		<fail unless="php.importer" message="php.importer must be defined in the build.properties as the location of composer" />
+	<target name="install-php">
+		<fail unless="composer" message="composer must be defined in the build.properties as the location of composer" />
 		<echo message="+---------------------+" />
 		<echo message="| Import PHP Packages |" />
 		<echo message="+---------------------+" />	
-		<exec executable="${php.importer}">
+		<exec executable="${composer}">
 			<arg line="install" />
 			<arg line="--prefer-dist" />
 		</exec>
 	</target>
 	
 	<target name="uninstall" description="Remove all of the libraries">
-		<fail unless="js.output.file" message="js.output.file must be defined in the build.properties as the location of the output libraries concatination" />
-		<fail unless="js.dir" message="js.dir must be defined in the build.properties as the location of the bower components" />
-		<fail unless="php.dir" message="php.dir must be defined in the build.properties as the location of the composer downloaded libraries" />
-		<fail unless="php.lock" message="php.lock must be defined in the build.properties as the location of the composer lock file" />
-		<delete dir="${php.dir}" />
-		<delete dir="${js.dir}" />
-		<delete file="${js.output.file}" />
-		<delete file="${php.lock}" />
+		<fail unless="js.output" message="js.output must be defined in the build.properties as the location of the output libraries concatination" />
+		<fail unless="bower.dir" message="bower.dir must be defined in the build.properties as the location of the bower components" />
+		<fail unless="composer.dir" message="composer.dir must be defined in the build.properties as the location of the composer downloaded libraries" />
+		<fail unless="composer.lock" message="composer.lock must be defined in the build.properties as the location of the composer lock file" />
+		<delete dir="${composer.dir}" />
+		<delete file="${js.output}" />
+		<delete file="${composer.lock}" />
+		<antcall target="uninstall-components" />
 	</target>
 </project>

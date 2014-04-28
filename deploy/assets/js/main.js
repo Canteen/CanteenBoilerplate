@@ -1,7 +1,7 @@
 $(function(){
 	
 	// Create a new site
-	var site = new Canteen.Site();
+	var site = Canteen.Site.instance;
 	
 	// Listen for when the site is ready
 	site.on('ready', function(){
