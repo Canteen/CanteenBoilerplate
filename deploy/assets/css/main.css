@@ -33,6 +33,13 @@ footer {
 	color:#999;
 }
 
+.admin {
+	border:0;
+	width:auto;
+	padding:0;
+	max-width:inherit;
+}
+
 nav.main {
 	text-align:center;
 }
